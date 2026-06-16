@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <title>4DHumans WebXR - 3D Digital Twin Viewer</title>
+  <meta name="description" content="Immersive WebXR viewer for 4D-Humans reconstructed human body meshes. Inspect, rotate, and scale virtual 3D twins directly in VR.">
+  
+  <!-- Importmap to resolve bare module specifiers for Three.js and its addons -->
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+      }
+    }
+  </script>
+  
+  <!-- Cyberpunk Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Three.js Canvas Container -->
+  <main id="canvas-container" aria-label="3D Viewport"></main>
+
+  <!-- Drag-and-Drop Model Upload Container -->
+  <div id="upload-container" class="upload-container">
+    <div class="scanner-background" aria-hidden="true"></div>
+    <label id="upload-box" class="upload-box interactive" for="file-input" tabindex="0" role="button" aria-label="Upload 3D human model">
+      <div class="upload-icon" aria-hidden="true">✦</div>
+      <h3>Reconstruct 3D Digital Twin</h3>
+      <p>Drag & drop a portrait image (JPG, PNG) here, or click to browse</p>
+      <div style="margin-top: 16px;">
+        <span style="color: var(--text-muted); font-size: 12px; display: block; margin-bottom: 8px;">— OR —</span>
+        <button id="load-sample-btn" class="btn btn-secondary interactive">Load Demo Mesh</button>
+      </div>
+    </label>
+    <input type="file" id="file-input" accept="image/*" aria-hidden="true">
+  </div>
+
+  <!-- Floating HUD Panel Overlay -->
+  <div class="hud-overlay">
+    
+    <!-- Top Header Bar -->
+    <header class="interactive">
+      <div class="logo">
+        <h1>4D-HUMANS VR</h1>
+        <span>Immersive Mesh Inspector</span>
+      </div>
+      <div class="vr-controls">
+        <button id="enter-vr-btn" class="btn btn-secondary" disabled>
+          <span class="vr-icon">🕶️</span> ENTER VR
+        </button>
+      </div>
+    </header>
+
+    <!-- Bottom HUD Info Bar -->
+    <div class="controls-bottom">
+      
+      <!-- VR Instructions Panel (Collapsible) -->
+      <section id="instructions-panel" class="panel instructions-panel interactive collapsed" aria-labelledby="instructions-title">
+        <h4 id="instructions-title">
+          <span>Navigation Controls</span>
+          <span class="toggle-icon">▼</span>
+        </h4>
+        <ul style="display: none;">
+          <li>
+            <span class="keycap">Left Stick X</span>
+            <span>Rotate human twin (Y-axis)</span>
+          </li>
+          <li>
+            <span class="keycap">Left Stick Y</span>
+            <span>Scale twin size (0.3x - 3.0x)</span>
+          </li>
+          <li>
+            <span class="keycap">Button A</span>
+            <span>Reset rotation & scale</span>
+          </li>
+          <li>
+            <span class="keycap">Button B</span>
+            <span>Exit immersive VR session</span>
+          </li>
+          <li>
+            <span class="keycap">Button X</span>
+            <span>Toggle instructions panel UI</span>
+          </li>
+          <li>
+            <span class="keycap">Desktop</span>
+            <span>Left-click + Drag to rotate camera</span>
+          </li>
+        </ul>
+      </section>
+
+      <!-- Measurements Panel -->
+      <section id="measurements-panel" class="panel measurements-panel interactive" style="display: none;">
+        <h4>AI Sizing Measurements</h4>
+        <div class="measurements-grid">
+          <div class="measurement-item">
+            <span class="value" id="val-height">—</span>
+            <span class="label">Height</span>
+          </div>
+          <div class="measurement-item">
+            <span class="value" id="val-chest">—</span>
+            <span class="label">Chest</span>
+          </div>
+          <div class="measurement-item">
+            <span class="value" id="val-waist">—</span>
+            <span class="label">Waist</span>
+          </div>
+          <div class="measurement-item">
+            <span class="value" id="val-hip">—</span>
+            <span class="label">Hip</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Status Panel -->
+      <section class="panel status-panel interactive" aria-labelledby="status-title">
+        <h4 id="status-title" style="display:none">System Status</h4>
+        <div class="status-indicator">
+          <span id="status-text">Initializing...</span>
+          <span id="status-dot" class="status-dot" aria-hidden="true"></span>
+        </div>
+        <div id="model-info-text" class="model-info">No model active</div>
+      </section>
+
+    </div>
+
+  </div>
+
+  <!-- Three.js App Entry Point -->
+  <script type="module" src="viewer.js"></script>
+
+</body>
+</html>

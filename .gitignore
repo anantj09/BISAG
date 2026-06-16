@@ -1,0 +1,38 @@
+# Environments
+Backend/.venv/
+.venv/
+venv/
+env/
+
+# Model Weights and Large Binary Checkpoints (Total 2.39 GB)
+Backend/weights/
+*.ckpt
+*.pth
+*.pkl
+
+# Compiled Python Bytecode and Cache
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Temporary uploads and generation caches
+Backend/temp/*
+!Backend/temp/.gitkeep
+
+# Exclude generated 3D meshes (keep only the fallback demo mesh)
+data/
+frontend/data/demo/*
+!frontend/data/demo/9dc6216c-3ba3-403b-9fc8-1783c828b8c4_mesh.gltf
+
+# IDE metadata and system junk files
+.idea/
+.vscode/
+.antigravity-ide/
+.gemini/
+.DS_Store
+Thumbs.db
+*.log
+
+webxr_integration.md
+architecture_and_workings.md
