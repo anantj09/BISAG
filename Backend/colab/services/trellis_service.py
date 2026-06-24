@@ -29,9 +29,14 @@ class TrellisService:
 
         os.environ['SPCONV_ALGO'] = 'native'
         
-        # Load the SOTA TRELLIS.2 pipeline
+        # Load the SOTA TRELLIS.2 pipeline with proper half-precision to fit within Colab VRAM limits
         from trellis2.pipelines import Trellis2ImageTo3DPipeline
-        self.pipeline = Trellis2ImageTo3DPipeline.from_pretrained("microsoft/TRELLIS.2-4B")
+        dtype = torch.bfloat16 if torch.cuda.is_bf16_supported() else torch.float16
+        print(f"Loading pipeline weights with precision: {dtype}...")
+        self.pipeline = Trellis2ImageTo3DPipeline.from_pretrained(
+            "microsoft/TRELLIS.2-4B",
+            torch_dtype=dtype
+        )
         self.pipeline.cuda()
         self.initialized = True
         print("--- TRELLIS.2 Pipeline successfully loaded on GPU ---")
